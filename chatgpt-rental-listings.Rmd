@@ -1,0 +1,37 @@
+---
+title: "ChatGPT Rental Listings"
+author: "Alec A. Nathan"
+output: html_document
+---
+
+###Setup
+```{r setup, include=FALSE}
+
+library(tidyverse)
+
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+###Load Example Properties
+```{r}
+properties_df <- data.frame('address'     = c('123 Main St, Atlanta, GA 30303','1000 1st Ave, Atlanta, GA 30303','200 2nd St'),
+                            'bedrooms'    = c('4','3','5'),
+                            'bathrooms'   = c('2 Full, 1 Half','2','4'),
+                            'size'        = c('2000 sqft','1645 sqft','3200 sqft'),
+                            'year_built'  = c('2005','1988','2013'),
+                            'asking_rent' = c('1500','1250','3500'),
+                            'amenity_1'   = c('2-car garage','rooftop balcony','newly renovated kitchen'),
+                            'amenity_2'   = c('outdoor kitchen','gas stove','steam shower'),
+                            'amenity_3'   = c('master bedroom on main floor','two closets in master bedroom','spacious backyard'),
+                            'area_char'   = c('Located in-district for the best school in the county','2 blocks from MARTA station','in a gated community'))
+```
+
+###Generate Prompts for Chat GPT
+```{r}
+properties_prompt <- properties_df %>% 
+  mutate(primer = "Using only the information provided, create an output with varied sentence structure and syntax.") %>% 
+  mutate(prompt = str_glue("{primer} Write a rental listing for {address}. The home has {bedrooms} bedrooms {bathrooms} bathrooms, is {size} and was built in {year_built}. The owner wants {asking_rent} in rent. Highlight {amenity_1}, {amenity_2}, and {amenity_3}. Be sure to note that the home is {area_char}."))
+```
+
